@@ -1,0 +1,22 @@
+{
+  "name": "k-cli",
+  "version": "1.0.0",
+  "description": "frist time to created cli template by kazaf",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "kazaf",
+  "license": "ISC",
+  "devDependencies": {
+    "css-loader": "^6.7.3",
+    "html-webpack-plugin": "^5.5.1",
+    "mini-css-extract-plugin": "^2.7.5",
+    "sass": "^1.60.0",
+    "sass-loader": "^13.1.0",
+    "sass-resources-loader": "^2.2.5",
+    "webpack": "^5.82.1",
+    "webpack-cli": "^5.1.1"
+  }
+}
