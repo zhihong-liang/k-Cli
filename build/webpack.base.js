@@ -1,9 +1,6 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
-// mini-css-extract-plugin：可将css代码打包成一个单独的css文件
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-
 const { VueLoaderPlugin } = require('vue-loader')
 const ProgressBarPlugin = require('progress-bar-webpack-plugin')
 const chalk = require('chalk')
@@ -31,11 +28,6 @@ module.exports = {
       // js文件插入 body里
       inject: 'body'
     }),
-    new MiniCssExtractPlugin({
-      // 将css代码输出到dist/styles文件夹下
-      filename: 'styles/chunk-[contenthash].css',
-      ignoreOrder: true
-    }),
     new VueLoaderPlugin(),
     new ProgressBarPlugin({
       format: ` build [:bar] ${chalk.green.bold(':percent')} (:elapsed seconds)`,
@@ -43,16 +35,6 @@ module.exports = {
   ],
   module: {
     rules: [
-      {
-        // 匹配文件后缀的规则
-        test: /\.(css|s[cs]ss)$/,
-        use: [
-          // loader执行顺序是从右到左
-          MiniCssExtractPlugin.loader,
-          'css-loader',
-          'sass-loader',
-        ]
-      },
       {
         test: /\.(png|jpe?g|gif|svg|webp)$/,
         type: 'asset',
@@ -68,6 +50,9 @@ module.exports = {
       },
       {
         test: /\.js$/,
+        //使用include来指定编译文件夹
+        include: path.resolve(__dirname, '../src'),
+        //使用exclude排除指定文件夹
         exclude: /node_modules/,
         use: [
           'babel-loader'
@@ -76,6 +61,14 @@ module.exports = {
       {
         test: /\.vue$/,
         use: 'vue-loader'
+      },
+      // 多进程打包，可以大大提高构建的速度，使用方法是将thread-loader放在比较费时间的loader之前，比如babel-loader
+      {
+        test: /\.js$/,
+        use: [
+          'thread-loader',
+          'babel-loader'
+        ]
       }
     ]
   },
@@ -87,5 +80,7 @@ module.exports = {
     },
     // 引入文件时省略后缀
     extensions: ['.js', '.ts', '.less', '.vue']
-  }
+  },
+  // 开启内存缓存
+  cache: true
 }
